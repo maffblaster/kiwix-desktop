@@ -39,6 +39,13 @@ MainWindow::MainWindow(QWidget *parent) :
 #if !SYSTEMTITLEBAR
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
 #endif
+#ifdef Q_OS_WIN
+    QWindow *window = windowHandle();
+    if (!window) {
+        return;
+    }
+    QWindowsWindowFunctions::setHasBorderInFullScreen(window, true);
+    #endif
 }
 
 MainWindow::~MainWindow()

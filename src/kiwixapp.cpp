@@ -12,6 +12,9 @@
 #include <QPrintDialog>
 #include <thread>
 #include <QMessageBox>
+#ifdef Q_OS_WIN
+#include <QtPlatformHeaders\QWindowsWindowFunctions>
+#endif
 
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv),
@@ -90,8 +93,11 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     mp_mainWindow->getSideContentManager()->setContentManager(mp_manager);
     setSideBar(CONTENTMANAGER_BAR);
     postInit();
-
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
+    #ifdef Q_OS_WIN
+    QWindow *window = mp_mainWindow->windowHandle();
+    QWindowsWindowFunctions::setHasBorderInFullScreen(window, true);
+    #endif
     mp_mainWindow->show();
 }
 
